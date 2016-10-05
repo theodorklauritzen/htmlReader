@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Trying to make a library that reads html files.",
   "main": "app.js",
+  "start": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
