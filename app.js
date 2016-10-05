@@ -9,6 +9,8 @@ function htmlElement(str) {
   var closeTag = false;
   var readingChildNode = false;
   var currChildNode = "";
+  var readingValue = false;
+  var currValue = "";
 
   this.childNodes = [];
 
@@ -16,6 +18,9 @@ function htmlElement(str) {
   for(var i = 0; i < splitted.length; i++) {
     if(readingChildNode) {
       currChildNode += splitted[i];
+    }
+    if(readingValue) {
+      currValue += splitted[i];
     }
     if(splitted[i] === ">") {
       open = false;
@@ -42,6 +47,7 @@ function htmlElement(str) {
         opened.push(currName);
         if(opened.length === 1) {
           this.type = opened[0];
+          readingValue = true;
         } else if(opened.length === 2) {
           readingChildNode = true;
         }
@@ -58,10 +64,21 @@ function htmlElement(str) {
         if(readingChildNode) {
           currChildNode += splitted[i];
         }
+        if(readingValue) {
+          currValue += splitted[i];
+        }
       }
       open = true;
     }
   }
+
+  var currValueSplitted = currValue.split("");
+  var valuePos = this.type.split("").length + 3
+  var start = currValueSplitted.length - valuePos;
+  for(var i = start; i < start + valuePos; i++) {
+    currValueSplitted.splice(start);
+  }
+  this.value = currValueSplitted.join("");
 
 
 }
