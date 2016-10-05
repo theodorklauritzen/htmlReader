@@ -1,0 +1,23 @@
+{
+  "name": "htmlreader",
+  "version": "1.0.0",
+  "description": "Trying to make a library that reads html files.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xupertheo/htmlReader.git"
+  },
+  "keywords": [
+    "node",
+    "html"
+  ],
+  "author": "xupertheo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xupertheo/htmlReader/issues"
+  },
+  "homepage": "https://github.com/xupertheo/htmlReader#readme"
+}
