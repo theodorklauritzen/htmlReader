@@ -11,11 +11,23 @@ function htmlElement(str) {
   var currChildNode = "";
   var readingValue = false;
   var currValue = "";
+  var newText = false;
+  var text = "";
 
   this.childNodes = [];
 
   var splitted = this.rawHTML.split("");
   for(var i = 0; i < splitted.length; i++) {
+    if(!open && !readingChildNode && splitted[i] !== "<" && splitted[i] !== ">") {
+      text += splitted[i];
+      newText = false;
+    } else if(!newText) {
+      if(text !== "") {
+        this.childNodes.push(new textElement(text));
+        text = "";
+      }
+      newText = true;
+    }
     if(readingChildNode) {
       currChildNode += splitted[i];
     }
@@ -80,9 +92,39 @@ function htmlElement(str) {
   }
   this.value = currValueSplitted.join("");
 
-
 }
 
+htmlElement.prototype.getChildNodes = function(nodeName) {
+  var ret = [];
+  for(var i = 0; i < this.childNodes.length; i++) {
+    if(this.childNodes[i].type === nodeName) {
+      ret.push(this.childNodes[i]);
+    }
+  }
+  return ret;
+}
+
+htmlElement.prototype.getChildNode = function(nodeName, ind) {
+  var nodes = this.getChildNodes(nodeName);
+  if(nodes.length === 0) {
+    return false;
+  }
+  if(ind) {
+    if(ind < 0) {
+      return nodes[0];
+    } else if(ind > nodes.length - 1) {
+      return nodes[nodes.length - 1];
+    } else {
+      return nodes[ind];
+    }
+  } else {
+    return nodes[0];
+  }
+}
+
+function textElement(text) {
+  this.text = text;
+}
 
 module.exports = {
   htmlElement: htmlElement
@@ -90,5 +132,5 @@ module.exports = {
 
 //debugging
 
-var test = new htmlElement("<html><head></head><body>hallo!</body><div><a>HEI!</a></div></html>");
-console.log(test);
+var test = new htmlElement("<html><head></head><body>hallo!</body><div><a>HEI!</a></div><div>div 2</div></html>");
+console.log(test.getChildNode("div"));
