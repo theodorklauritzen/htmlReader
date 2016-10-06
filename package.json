@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/xupertheo/htmlReader#readme",
   "dependencies": {
-    "require": "^2.4.20"
+    "request": "^2.75.0"
   }
 }

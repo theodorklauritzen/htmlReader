@@ -1,4 +1,7 @@
 
+//libraries
+var request = require("request");
+
 function htmlElement(str) {
   this.rawHTML = str;
 
@@ -135,16 +138,42 @@ function webPage() {
   this.url = "";
   var resivedData;
 
-  this.newPage = function(url) {
+  this.files = {
+    main: "123"
+  };
+
+  this.newPage = function(url, callback, data, method) {
     this.url = url;
+
+    request({
+      uri: url,
+      qs: data || {},
+      method: method || "GET"
+
+    }, function (err, res, body) {
+      if (!err) {
+        resivedData = res;
+        if(callback) {
+          callback();
+        }
+      } else {
+        console.error(err);
+        throw err;
+      }
+    });
   }
+
+
 }
 
 module.exports = {
-  htmlElement: htmlElement
+  htmlElement: htmlElement,
+  webPage: webPage
 };
 
 //debugging
 
-var test = new htmlElement("<html><head></head><body>hallo!</body><div><a>HEI!</a></div><div>div 2</div></html>");
-console.log(test.getChildNode("div"));
+var test = new webPage();
+test.newPage("https://www.google.com/", function() {
+  console.log(test);
+});
