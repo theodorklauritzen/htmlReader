@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/xupertheo/htmlReader/issues"
   },
-  "homepage": "https://github.com/xupertheo/htmlReader#readme"
+  "homepage": "https://github.com/xupertheo/htmlReader#readme",
+  "dependencies": {
+    "require": "^2.4.20"
+  }
 }

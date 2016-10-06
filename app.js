@@ -126,6 +126,20 @@ function textElement(text) {
   this.text = text;
 }
 
+function webPage() {
+  var data = {
+    document: null,
+    window: null
+  };
+
+  this.url = "";
+  var resivedData;
+
+  this.newPage = function(url) {
+    this.url = url;
+  }
+}
+
 module.exports = {
   htmlElement: htmlElement
 };
