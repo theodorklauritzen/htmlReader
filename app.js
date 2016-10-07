@@ -18,6 +18,7 @@ function htmlElement(str) {
   var text = "";
 
   this.childNodes = [];
+  this.children = [];
 
   var splitted = this.rawHTML.split("");
   for(var i = 0; i < splitted.length; i++) {
@@ -26,7 +27,7 @@ function htmlElement(str) {
       newText = false;
     } else if(!newText) {
       if(text !== "") {
-        this.childNodes.push(new textElement(text));
+        this.children.push(text);
         text = "";
       }
       newText = true;
@@ -46,6 +47,7 @@ function htmlElement(str) {
             //READING
             if(opened.length === 2) {
               this.childNodes.push(new htmlElement("<" + currName + ">" + currChildNode));
+              this.children.push(new htmlElement("<" + currName + ">" + currChildNode));
               currChildNode = "";
               readingChildNode = false;
             }
@@ -125,22 +127,24 @@ htmlElement.prototype.getChildNode = function(nodeName, ind) {
   }
 }
 
-function textElement(text) {
-  this.text = text;
-}
-
 function webPage() {
-  var data = {
-    document: null,
-    window: null
+  var document;
+  var window;
+
+  this.data = {
+    document: document,
+    window: window
   };
 
   this.url = "";
   var resivedData;
 
-  this.files = {
-    main: "123"
+  var files = {
+    main: null
   };
+  this.files = function() {
+    return files;
+  }
 
   this.newPage = function(url, callback, data, method) {
     this.url = url;
@@ -153,6 +157,26 @@ function webPage() {
     }, function (err, res, body) {
       if (!err) {
         resivedData = res;
+        //removeing <!DOCTYPE html>
+        var splitted = res.body.split("");
+        var testDoctype = "";
+        var doctype = "<!doctype html>";
+        var doctypeArray = doctype.split("");
+        var match = true;
+        for(var i = 0; i < doctypeArray.length; i++) {
+          if(doctypeArray[i] !== splitted[i].toLowerCase()) {
+            match = false;
+          }
+        }
+        var htmlString = "";
+        if(match) {
+          for(var i = doctypeArray.length; i < splitted.length; i++) {
+            htmlString += splitted[i];
+          }
+        } else {
+          htmlString = res.body;
+        }
+        files.main = new htmlElement(htmlString);
         if(callback) {
           callback();
         }
@@ -174,6 +198,6 @@ module.exports = {
 //debugging
 
 var test = new webPage();
-test.newPage("https://www.google.com/", function() {
-  console.log(test);
+test.newPage("http://localhost:3000/", function() {
+  console.log(test.files().main.childNodes[0].getChildNode("title").value);
 });
