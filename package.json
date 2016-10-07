@@ -23,5 +23,10 @@
   "homepage": "https://github.com/xupertheo/htmlReader#readme",
   "dependencies": {
     "request": "^2.75.0"
-  }
+  },
+  "files": [
+    "app.js",
+    "README.md",
+    "LICENSE"
+  ]
 }
